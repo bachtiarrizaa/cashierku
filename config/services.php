@@ -34,5 +34,10 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'rs_api' => [
+        'base_url' => env('RS_API_BASE_URL'),
+        'email' => env('RS_API_EMAIL'),
+        'password' => env('RS_API_PASSWORD'),
+    ]
 
 ];

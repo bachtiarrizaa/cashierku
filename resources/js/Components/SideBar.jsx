@@ -2,7 +2,7 @@ import { useState } from "react";
 import MenuItem from "./MenuItem";
 import MenuItemWithDropdown from "./MenuItemWithDropdown";
 import LogoutButton from "./Button/LogoutButton";
-import useLogout from "../Hooks/useLogout";
+import useLogout from "../Hooks/Auth/useLogout";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,7 +10,10 @@ import {
   faAnglesRight,
   faRightFromBracket,
   faGear,
-  faMoneyCheckDollar
+  faMoneyCheckDollar,
+  faShieldHalved,
+  faStethoscope,
+  faTags
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function Sidebar() {
@@ -20,9 +23,8 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`flex flex-col min-h-full px-3 pt-1 pb-6 bg-white border-r border-r-gray-200 transition-all duration-300 ${
-        isOpen ? "w-56" : "w-16"
-      }`}
+      className={`flex flex-col min-h-full px-3 pt-1 pb-6 bg-white border-r border-r-gray-200 transition-all duration-300 ${isOpen ? "w-56" : "w-16"
+        }`}
     >
 
       <div className="flex flex-col justify-between flex-1">
@@ -37,15 +39,14 @@ export default function Sidebar() {
             <button onClick={toggleSidebar}>
               <FontAwesomeIcon
                 icon={faAnglesRight}
-                className={`transition-transform duration-300 cursor-pointer ${
-                  !isOpen ? "rotate-180 py-1" : ""
-                }`}
+                className={`transition-transform duration-300 cursor-pointer ${!isOpen ? "rotate-180 py-1" : ""
+                  }`}
               />
             </button>
           </div>
 
           <div>
-            <MenuItemWithDropdown
+            {/* <MenuItemWithDropdown
               icon={faUser}
               label="Master Data"
               isBold={true}
@@ -59,13 +60,34 @@ export default function Sidebar() {
                 { label: "Lokasi Kerja", to: "/dashboard/sites" },
                 { label: "Shift Kerja", to: "/dashboard/shifts" },
               ]}
-            />
+            /> */}
 
-            <MenuItem
+            {/* <MenuItem
               icon={faMoneyCheckDollar}
               label="Slip Gaji"
               isOpen={isOpen}
               to="/settings"
+            /> */}
+
+            <MenuItem
+              icon={faShieldHalved}
+              label="Asuransi"
+              isOpen={isOpen}
+              to="/insurances"
+            />
+
+            <MenuItem
+              icon={faStethoscope}
+              label="Tindakan"
+              isOpen={isOpen}
+              to="/procedures"
+            />
+
+            <MenuItem
+              icon={faTags}
+              label="Harga Tindakan"
+              isOpen={isOpen}
+              to="/procedure-prices"
             />
           </div>
         </nav>

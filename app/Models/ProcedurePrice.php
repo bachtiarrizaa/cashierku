@@ -18,4 +18,8 @@ class ProcedurePrice extends Model
         'start_date',
         'end_date',
     ];
+    public function procedure()
+    {
+        return $this->belongsTo(Procedure::class);
+    }
 }

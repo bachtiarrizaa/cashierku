@@ -42,14 +42,14 @@ export default function Home() {
 
                 <div className="flex flex-col sm:flex-row gap-4 mt-6">   
                   <Link
-                    href="/register"
+                    href="/login"
                     className="text-center w-full px-6 py-3 text-sm font-semibold text-white transition-transform duration-300 transform bg-cyan-600 border-2 border-cyan-600 rounded-lg hover:bg-cyan-600/85 sm:w-auto"
                   >
                     Sign In
                   </Link>
 
                   <Link
-                    href="/login"
+                    href="/register"
                     className="text-center w-full px-6 py-3 text-sm font-semibold text-cyan-600 transition-transform duration-300 transform bg-white border-2 border-cyan-600 rounded-lg hover:bg-cyan-50 sm:w-auto"
                   >
                     Sign Up

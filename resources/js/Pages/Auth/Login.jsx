@@ -1,15 +1,58 @@
-import { Head, Link } from '@inertiajs/react'
+import { useEffect, useRef } from 'react'
+import { Head, Link, usePage, router } from '@inertiajs/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { InputForm } from '../../Components/Forms/InputForm'
 import { SocialMedia } from '../../Components/SocialMedia'
 import { SubmitButton } from '../../Components/Button/SubmitButton'
-import { faLinkedin, faInstagram, faFacebook, faXTwitter, faMedium, faGithub } from '@fortawesome/free-brands-svg-icons'
+import { AlertModal } from '../../Components/Modals/AlertModal'
+import { useAlertModal } from '../../Hooks/useAlertModal'
+import { faLinkedin, faInstagram, faXTwitter, faMedium, faGithub } from '@fortawesome/free-brands-svg-icons'
 import { faEnvelope, faKey } from '@fortawesome/free-solid-svg-icons'
+import { useLogin } from '../../Hooks/Auth/useLogin'
 
 export default function Login() {
+  const { form, submit } = useLogin()
+  const { alert, showError, showSuccess } = useAlertModal()
+  const prevProcessingRef = useRef(false)
+  const { props } = usePage()
+
+  useEffect(() => {
+    if (props.loginSuccess && props.redirectTo) {
+      showSuccess('Login berhasil', 'Berhasil')
+      const timer = setTimeout(() => {
+        router.visit(props.redirectTo)
+      }, alert.duration)
+      return () => clearTimeout(timer)
+    }
+  }, [props.loginSuccess, props.redirectTo, showSuccess, alert.duration])
+
+  useEffect(() => {
+    if (props.logoutSuccess) {
+      showSuccess('Logout berhasil', 'Berhasil')
+    }
+  }, [props.logoutSuccess, showSuccess])
+
+  useEffect(() => {
+    const requestJustFailed =
+      prevProcessingRef.current &&
+      !form.processing &&
+      Object.keys(form.errors).length > 0
+
+    if (requestJustFailed) {
+      const message =
+        form.errors.email ||
+        form.errors.password ||
+        Object.values(form.errors)[0]
+      showError(message, 'Login Gagal')
+    }
+
+    prevProcessingRef.current = form.processing
+  }, [form.processing, form.errors, showError])
+
   return (
     <>
       <Head title="Login" />
+      <AlertModal {...alert} />
 
       <section className="bg-white min-h-screen">
         <div className="container px-6 py-24 mx-auto lg:py-32">
@@ -27,17 +70,24 @@ export default function Login() {
               </p>
 
               <h2 className="mt-4 text-2xl font-medium text-gray-800 lg:text-3xl">
-                Login to your account
+                Sign In to your account
               </h2>
             </div>
 
             <div className="mt-8 lg:w-1/2 lg:mt-0">
-              <form className="w-full lg:max-w-xl space-y-4">
+              <form
+                onSubmit={submit}
+                className="w-full lg:max-w-xl space-y-4"
+              >
                 
                 <InputForm
                   type="email"
                   name="email"
                   placeholder="Email address"
+                  value={form.data.email}
+                  onChange={e => form.setData('email', e.target.value)}
+                  error={form.errors.email}
+                  required
                   icon={
                     <FontAwesomeIcon
                       icon={faEnvelope}
@@ -50,6 +100,10 @@ export default function Login() {
                   type="password"
                   name="password"
                   placeholder="Password"
+                  value={form.data.password}
+                  onChange={e => form.setData('password', e.target.value)}
+                  error={form.errors.password}
+                  required
                   icon={
                     <FontAwesomeIcon
                       icon={faKey}

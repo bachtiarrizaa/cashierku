@@ -1,13 +1,15 @@
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChildReaching } from "@fortawesome/free-solid-svg-icons";
 
 export default function Navbar() {
+  const { auth } = usePage().props;
+
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 bg-white shadow z-20 h-16">
         <div className="h-full flex items-center justify-between px-6">
-          
+
           <Link
             href="/dashboard"
             className="flex items-center text-2xl font-bold"
@@ -26,7 +28,7 @@ export default function Navbar() {
 
           <div className="flex items-center space-x-2">
             <span className="hidden md:inline text-gray-700 font-medium">
-              Halo
+              Halo {auth?.user?.name}
             </span>
 
             <button type="button" className="focus:outline-none">

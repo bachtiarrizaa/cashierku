@@ -1,15 +1,17 @@
 import { useState } from "react";
+import { router } from "@inertiajs/react"; 
 
 export default function useLogout() {
   const [showModal, setShowModal] = useState(false);
 
-  const handleLogout = () => {
-    console.log("Logout clicked");
-    setShowModal(false);
-  };
-
   const openLogoutModal = () => setShowModal(true);
   const closeLogoutModal = () => setShowModal(false);
+
+  const handleLogout = () => {
+    router.post("/logout", {}, {
+      onFinish: () => setShowModal(false),
+    });
+  };
 
   return {
     showModal,

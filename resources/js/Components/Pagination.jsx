@@ -1,11 +1,10 @@
 import { Link } from '@inertiajs/react';
 
 export default function Pagination({ links, from, to, total }) {
-    if (links.length <= 3) return null;
 
     return (
-        <div className="flex justify-between items-center mt-4">
-            <div className="text-gray-500">
+        <div className="flex justify-between items-center mt-4 text-xs font-semibold">
+            <div className="text-gray-500 pl-4">
                 <span className="font-medium text-gray-700">{from} - {to}</span> of {total} records
             </div>
 
@@ -14,7 +13,7 @@ export default function Pagination({ links, from, to, total }) {
                     const isPrevious = link.label.includes('Previous') || link.label.includes('&laquo;');
                     const isNext = link.label.includes('Next') || link.label.includes('&raquo;');
 
-                    let className = "flex items-center justify-center px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md 200 hover:bg-cyan-600 hover:text-white";
+                    let className = "flex items-center justify-center px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md hover:bg-cyan-600 hover:text-white cursor-pointer";
 
                     if (link.active) {
                         className = "flex items-center justify-center px-4 py-2 mx-1 text-white bg-cyan-600 rounded-md";

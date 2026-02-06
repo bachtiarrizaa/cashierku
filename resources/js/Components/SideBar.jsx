@@ -13,7 +13,8 @@ import {
   faMoneyCheckDollar,
   faShieldHalved,
   faStethoscope,
-  faTags
+  faTags,
+  faTicket
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function Sidebar() {
@@ -36,7 +37,7 @@ export default function Sidebar() {
               </div>
             )}
 
-            <button onClick={toggleSidebar}>
+            <button onClick={toggleSidebar} className="cursor-pointer">
               <FontAwesomeIcon
                 icon={faAnglesRight}
                 className={`transition-transform duration-300 cursor-pointer ${!isOpen ? "rotate-180 py-1" : ""
@@ -88,6 +89,13 @@ export default function Sidebar() {
               label="Harga Tindakan"
               isOpen={isOpen}
               to="/procedure-prices"
+            />
+
+            <MenuItem
+              icon={faTicket}
+              label="Voucher"
+              isOpen={isOpen}
+              to="/vouchers"
             />
           </div>
         </nav>

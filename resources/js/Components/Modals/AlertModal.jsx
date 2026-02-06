@@ -30,24 +30,13 @@ const variants = {
   },
 }
 
-/**
- * AlertModal - Modal untuk menampilkan informasi hasil aksi (success, error, warning, info)
- * Auto-dismiss setelah beberapa detik.
- *
- * @param {boolean} isOpen - Mengontrol visibility modal
- * @param {function} onClose - Callback saat modal ditutup
- * @param {string} type - 'success' | 'error' | 'warning' | 'info'
- * @param {string} title - Judul alert
- * @param {string} message - Pesan/penjelasan alert
- * @param {number} duration - Durasi tampil dalam ms (default: 3000)
- */
 export function AlertModal({
   isOpen,
   onClose,
   type = 'info',
   title = 'Informasi',
   message,
-  duration = 3000,
+  duration = 2000,
 }) {
   const { icon, barColor, titleColor } = variants[type] ?? variants.info
 
@@ -71,9 +60,8 @@ export function AlertModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-4 px-4">
-      {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-transparent"
+        className="absolute inset-0 bg-transparent cursor-pointer"
         onClick={onClose}
         role="button"
         tabIndex={0}
@@ -81,7 +69,6 @@ export function AlertModal({
         aria-label="Tutup modal"
       />
 
-      {/* Alert Card */}
       <div
         className="relative flex flex-col w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-md"
         role="alertdialog"
@@ -102,14 +89,14 @@ export function AlertModal({
             <div className="mx-3">
               <span
                 id="alert-title"
-                className={`text-sm font-semibold ${titleColor}`}
+                className={`text-xs font-bold ${titleColor}`}
               >
                 {title}
               </span>
               {message && (
                 <p
                   id="alert-message"
-                  className="mt-1 text-sm text-gray-600"
+                  className="mt-1 text-xs text-gray-600"
                 >
                   {message}
                 </p>

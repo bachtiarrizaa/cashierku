@@ -3,11 +3,10 @@ import React from 'react'
 export function InputForm({ type, name, value, placeholder, onChange, icon, error, required, ...rest }) {
   return (
     <div>
-      <div className={`relative flex items-center border rounded-lg overflow-hidden ${
-        error
-          ? 'border-red-500 focus-within:ring-red-500'
-          : 'border-gray-300 focus-within:ring-cyan-600'
-      } focus-within:ring`}>
+      <div className={`relative flex items-center border rounded-lg overflow-hidden ${error
+        ? 'border-red-500 focus-within:ring-red-500'
+        : 'border-gray-300 focus-within:ring-cyan-600'
+        } focus-within:ring`}>
         {icon && <span className="absolute">{icon}</span>}
 
         <input

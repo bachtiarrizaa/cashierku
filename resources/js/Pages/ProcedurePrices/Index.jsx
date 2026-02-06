@@ -1,37 +1,21 @@
 import MainLayout from "../../Layouts/MainLayout";
 import { Head } from '@inertiajs/react';
 import Pagination from "../../Components/Pagination";
-import { router } from '@inertiajs/react';
-import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { formatDate } from "../../Utils/formatDate";
+import { useProcedurePrice } from "../../Hooks/ProcedurePrices/useProcedurePrice";
 
 export default function Index({ prices, filters = {} }) {
-    const [search, setSearch] = useState(filters.search || '');
-
-    useEffect(() => {
-        if ((filters.search || '') === search) {
-            return;
-        }
-
-        const timer = setTimeout(() => {
-            router.get(
-                '/procedure-prices',
-                { search: search },
-                { preserveState: true, replace: true }
-            );
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, [search]);
+    const { search, setSearch } = useProcedurePrice(filters);
 
     return (
         <>
-            <Head title="Procedure Prices" />
+            <Head title="Harga Tindakan" />
             <MainLayout>
-                <div className="px-4 py-1">
-                    <div className="flex justify-between items-center mb-4">
-                        <h1 className="text-2xl font-bold">Procedure Prices</h1>
+                <div className="px-2 py-1">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3 gap-4">
+                        <h1 className="text-xl font-bold text-gray-700">Data Harga Tindakan</h1>
                         <div className="relative flex items-center mt-4 md:mt-0">
                             <span className="absolute">
                                 <FontAwesomeIcon icon={faMagnifyingGlass} className="w-5 h-5 mx-3 text-gray-400" />
@@ -39,41 +23,51 @@ export default function Index({ prices, filters = {} }) {
 
                             <input
                                 type="text"
-                                placeholder="Search"
+                                placeholder="Cari harga tindakan..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                className="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 focus:border-cyan-600 focus:ring-cyan-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                                className="block w-full py-2 pr-3 text-gray-700 bg-white border border-gray-300 rounded-md placeholder-gray-400 focus:border-cyan-600 focus:ring-cyan-200 focus:outline-none focus:ring focus:ring-opacity-40 pl-11 text-sm"
                             />
                         </div>
                     </div>
 
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-xl border border-gray-200">
                         <div className="overflow-x-auto">
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-50">
                                     <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Procedure Name</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End Date</th>
+                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 tracking-wider">No</th>
+                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 tracking-wider">Nama Tindakan</th>
+                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 tracking-wider">Harga</th>
+                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 tracking-wider">Mulai Berlaku</th>
+                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 tracking-wider">Berakhir Pada</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {prices.data.length > 0 ? (
                                         prices.data.map((price, index) => (
-                                            <tr key={price.id}>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{index + 1 + (prices.current_page - 1) * prices.per_page}</td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{price.procedure?.name || '-'}</td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">RP {Number(price.unit_price).toLocaleString('id-ID')}</td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(price.start_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(price.end_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
+                                            <tr key={price.id} className="hover:bg-gray-50 transition-colors">
+                                                <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-600">
+                                                    {index + 1 + (prices.current_page - 1) * prices.per_page}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-700">
+                                                    {price.procedure?.name || '-'}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-600">
+                                                    RP {Number(price.unit_price).toLocaleString('id-ID')}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-600 font-medium">
+                                                    {formatDate(price.start_date)}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-600 font-medium">
+                                                    {formatDate(price.end_date)}
+                                                </td>
                                             </tr>
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
-                                                No procedure prices found.
+                                            <td colSpan="5" className="px-6 py-12 text-center text-gray-500 italic">
+                                                Tidak ada harga tindakan ditemukan.
                                             </td>
                                         </tr>
                                     )}

@@ -1,37 +1,20 @@
 import MainLayout from "../../Layouts/MainLayout";
 import { Head } from '@inertiajs/react';
 import Pagination from "../../Components/Pagination";
-import { router } from '@inertiajs/react';
-import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { useInsurances } from "../../Hooks/Insurances/useInsurances";
 
 export default function Index({ insurances, filters = {} }) {
-    const [search, setSearch] = useState(filters.search || '');
-
-    useEffect(() => {
-        if ((filters.search || '') === search) {
-            return;
-        }
-
-        const timer = setTimeout(() => {
-            router.get(
-                '/insurances',
-                { search: search },
-                { preserveState: true, replace: true }
-            );
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, [search]);
+    const { search, setSearch } = useInsurances(filters);
 
     return (
         <>
-            <Head title="Insurances" />
+            <Head title="Asuransi" />
             <MainLayout>
-                <div className="px-4 py-1">
-                    <div className="flex justify-between items-center mb-4">
-                        <h1 className="text-2xl font-bold">Insurances</h1>
+                <div className="px-2 py-1">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3 gap-4">
+                        <h1 className="text-xl font-bold text-gray-700">Data Asuransi</h1>
                         <div className="relative flex items-center mt-4 md:mt-0">
                             <span className="absolute">
                                 <FontAwesomeIcon icon={faMagnifyingGlass} className="w-5 h-5 mx-3 text-gray-400" />
@@ -39,35 +22,39 @@ export default function Index({ insurances, filters = {} }) {
 
                             <input
                                 type="text"
-                                placeholder="Search"
+                                placeholder="Cari asuransi..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                className="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 focus:border-cyan-600 focus:ring-cyan-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                                className="block w-full py-2 pr-3 text-gray-700 bg-white border border-gray-300 rounded-md placeholder-gray-400 focus:border-cyan-600 focus:ring-cyan-200 focus:outline-none focus:ring focus:ring-opacity-40 pl-11 text-sm"
                             />
                         </div>
                     </div>
 
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-xl border border-gray-200">
                         <div className="overflow-x-auto">
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-50">
                                     <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 tracking-wider">No</th>
+                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 tracking-wider">Nama Asuransi</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {insurances.data.length > 0 ? (
                                         insurances.data.map((insurance, index) => (
-                                            <tr key={insurance.id}>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{index + 1 + (insurances.current_page - 1) * insurances.per_page}</td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{insurance.name}</td>
+                                            <tr key={insurance.id} className="hover:bg-gray-50 transition-colors">
+                                                <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-600">
+                                                    {index + 1 + (insurances.current_page - 1) * insurances.per_page}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-600">
+                                                    {insurance.name}
+                                                </td>
                                             </tr>
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan="2" className="px-6 py-4 text-center text-gray-500">
-                                                No insurances found.
+                                            <td colSpan="2" className="px-6 py-12 text-center text-gray-500 italic">
+                                                Tidak ada asuransi ditemukan.
                                             </td>
                                         </tr>
                                     )}

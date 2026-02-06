@@ -17,14 +17,6 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-  Route::get("/dashboard", function() {
-    $user = auth()->user();
-    if ($user->role->name === 'admin') return redirect()->route('admin.dashboard');
-    if ($user->role->name === 'cashier') return redirect()->route('cashier.dashboard');
-    if ($user->role->name === 'marketing') return redirect()->route('marketing.dashboard');
-    return Inertia::render("Dashboard/index");
-  })->name("dashboard");
-
   Route::middleware('role:admin')->group(function () {
       Route::get('/admin/dashboard', function () {
           return Inertia::render('Dashboard/AdminDashboard');
@@ -46,6 +38,7 @@ Route::middleware('auth')->group(function () {
   Route::resource('/insurances', \App\Http\Controllers\InsuranceController::class)->only(['index']);
   Route::resource('/procedures', \App\Http\Controllers\ProcedureController::class)->only(['index']);
   Route::resource('/procedure-prices', \App\Http\Controllers\ProcedurePriceController::class)->only(['index']);
+  Route::resource('/vouchers', \App\Http\Controllers\VoucherController::class);
 
   Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

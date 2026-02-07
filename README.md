@@ -81,7 +81,7 @@ DB_HOST=127.0.0.1
 DB_PORT=5432
 DB_DATABASE=cashierku
 DB_USERNAME=postgres
-DB_PASSWORD=obek
+DB_PASSWORD=root
 ```
 
 Pastikan database sudah dibuat:
@@ -115,7 +115,7 @@ Seeder akan otomatis membuat:
 
 ---
 
-### 8. Konfigurasi API RS Delta Surya (Opsional)
+### 8. Konfigurasi API RS Delta Surya
 
 Jika ingin sinkron data asuransi, tindakan, dan harga dari API RS Delta Surya, tambahkan di `.env`:
 
@@ -133,7 +133,7 @@ php artisan sync:delta-surya
 
 ---
 
-### 9. Sinkronisasi Data Master (Opsional)
+### 9. Sinkronisasi Data Master
 
 ```bash
 # Sinkron data asuransi
@@ -197,7 +197,7 @@ Aplikasi menjalankan scheduler untuk mengirim **laporan transaksi harian (CSV)**
 Tambahkan di `.env`:
 
 ```env
-DAILY_REPORT_EMAIL=admin@example.com
+DAILY_REPORT_EMAIL=interview.deltasurya@yopmail.com
 ```
 
 Jalankan scheduler:
@@ -249,7 +249,7 @@ composer dump-autoload
 
 ## 🧱 Struktur Teknologi
 
-* **Backend**: Laravel 11, Inertia.js
+* **Backend**: Laravel 12, Inertia.js, PHP 8.5
 * **Frontend**: React 19, Tailwind CSS, Vite
 * **Authentication**: Laravel Breeze (session-based)
 * **Database**: PostgreSQL

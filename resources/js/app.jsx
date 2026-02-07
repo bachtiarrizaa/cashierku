@@ -1,8 +1,13 @@
 import { createRoot } from 'react-dom/client'
-import { createInertiaApp, router } from '@inertiajs/react' // Gunakan router dari sini
+import { createInertiaApp, router } from '@inertiajs/react'
+import axios from 'axios'
 import React from 'react'
 import '../css/app.css'
 import PageLoader from './Components/PageLoader'
+
+axios.defaults.withCredentials = true
+axios.defaults.xsrfCookieName = 'XSRF-TOKEN'
+axios.defaults.xsrfHeaderName = 'X-XSRF-TOKEN'
 
 const pages = import.meta.glob('./Pages/**/*.jsx')
 

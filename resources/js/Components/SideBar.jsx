@@ -1,75 +1,85 @@
 import { useState } from "react";
+import { usePage } from "@inertiajs/react";
 import MenuItem from "./MenuItem";
-import MenuItemWithDropdown from "./MenuItemWithDropdown";
 import LogoutButton from "./Button/LogoutButton";
 import useLogout from "../Hooks/Auth/useLogout";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faUser,
   faAnglesRight,
   faRightFromBracket,
   faGear,
   faLink,
-  faMoneyCheckDollar,
+  faReceipt,
   faShieldHalved,
   faStethoscope,
   faTags,
-  faTicket
+  faTicket,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(true);
   const toggleSidebar = () => setIsOpen((prev) => !prev);
   const { showModal, openLogoutModal, closeLogoutModal, handleLogout } = useLogout();
+  const role = usePage().props?.auth?.user?.role?.name ?? "";
+
+  const dashboardUrl =
+    role === "admin"
+      ? "/admin/dashboard"
+      : role === "marketing"
+        ? "/marketing/dashboard"
+        : role === "cashier"
+          ? "/cashier/dashboard"
+          : "/";
+
+  const canAccessVoucher = role === "admin" || role === "marketing";
+  const canAccessUser = role === "admin";
 
   return (
     <div
       className={`flex flex-col min-h-full px-3 pt-1 pb-6 bg-white border-r border-r-gray-200 transition-all duration-300 ${isOpen ? "w-56" : "w-16"
         }`}
     >
-
       <div className="flex flex-col justify-between flex-1">
         <nav className="space-y-3">
           <div className="px-3 flex items-center justify-between py-2 text-gray-600 border-b border-b-gray-200">
             {isOpen && (
               <div className="flex items-center justify-center transition-opacity duration-300">
-                <span className="font-bold text-xl">Dashboard</span>
+                <span className="font-bold text-xl">Menu</span>
               </div>
             )}
-
             <button onClick={toggleSidebar} className="cursor-pointer">
               <FontAwesomeIcon
                 icon={faAnglesRight}
-                className={`transition-transform duration-300 cursor-pointer ${!isOpen ? "rotate-180 py-1" : ""
-                  }`}
+                className={`transition-transform duration-300 cursor-pointer ${!isOpen ? "rotate-180 py-1" : ""}`}
               />
             </button>
           </div>
 
           <div>
-            {/* <MenuItemWithDropdown
+            <MenuItem
               icon={faUser}
-              label="Master Data"
-              isBold={true}
+              label="Dashboard"
               isOpen={isOpen}
-              submenu={[
-                { label: "Karyawan", to: "/dashboard/users" },
-                { label: "Role", to: "/dashboard/roles" },
-                { label: "Jabatan", to: "/dashboard/positions" },
-                { label: "Divisi", to: "/dashboard/divisions" },
-                { label: "Departemen", to: "/dashboard/departements" },
-                { label: "Lokasi Kerja", to: "/dashboard/sites" },
-                { label: "Shift Kerja", to: "/dashboard/shifts" },
-              ]}
-            /> */}
+              to={dashboardUrl}
+            />
 
-            {/* <MenuItem
-              icon={faMoneyCheckDollar}
-              label="Slip Gaji"
+            {canAccessUser && (
+              <MenuItem
+                icon={faUser}
+                label="User"
+                isOpen={isOpen}
+                to="/users"
+              />
+            )}
+
+            <MenuItem
+              icon={faReceipt}
+              label="Transaksi"
               isOpen={isOpen}
-              to="/settings"
-            /> */}
+              to="/transactions"
+            />
 
             <MenuItem
               icon={faShieldHalved}
@@ -92,19 +102,22 @@ export default function Sidebar() {
               to="/procedure-prices"
             />
 
-            <MenuItem
-              icon={faTicket}
-              label="Voucher"
-              isOpen={isOpen}
-              to="/vouchers"
-            />
-
-            <MenuItem
-              icon={faLink}
-              label="Voucher Tindakan"
-              isOpen={isOpen}
-              to="/voucher-procedures"
-            />
+            {canAccessVoucher && (
+              <>
+                <MenuItem
+                  icon={faTicket}
+                  label="Voucher"
+                  isOpen={isOpen}
+                  to="/vouchers"
+                />
+                <MenuItem
+                  icon={faLink}
+                  label="Voucher Tindakan"
+                  isOpen={isOpen}
+                  to="/voucher-procedures"
+                />
+              </>
+            )}
           </div>
         </nav>
 
@@ -115,7 +128,6 @@ export default function Sidebar() {
             isOpen={isOpen}
             to="/settings"
           />
-
           <LogoutButton
             icon={faRightFromBracket}
             label="Keluar"
@@ -135,16 +147,12 @@ export default function Sidebar() {
                     size="xl"
                   />
                 </div>
-
                 <div className="my-3 text-center">
-                  <h3 className="text-base font-medium text-gray-800">
-                    Konfirmasi Keluar
-                  </h3>
+                  <h3 className="text-base font-medium text-gray-800">Konfirmasi Keluar</h3>
                   <p className="mt-2 text-xs text-gray-500">
                     Apakah kamu yakin ingin keluar dari akun ini?
                   </p>
                 </div>
-
                 <div className="flex items-center justify-between">
                   <button
                     onClick={closeLogoutModal}

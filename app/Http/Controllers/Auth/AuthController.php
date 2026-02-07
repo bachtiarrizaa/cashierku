@@ -39,13 +39,21 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $this->loginService->handle($request->validated(), $request);
+        $user = $this->loginService->handle($request->validated(), $request);
+        $user->load('role');
 
         $request->session()->regenerate();
 
+        $redirectTo = match ($user->role?->name) {
+            'admin' => route('admin.dashboard'),
+            'marketing' => route('marketing.dashboard'),
+            'cashier' => route('cashier.dashboard'),
+            default => route('home'),
+        };
+
         return Inertia::render('Auth/Login', [
             'loginSuccess' => true,
-            'redirectTo'   => redirect()->intended('dashboard')->getTargetUrl(),
+            'redirectTo' => $redirectTo,
         ]);
     }
 

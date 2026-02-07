@@ -115,4 +115,12 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Daily Report Recipient
+    |--------------------------------------------------------------------------
+    | Email tujuan untuk laporan transaksi harian (cron jam 01:00).
+    */
+    'daily_report_recipient' => env('DAILY_REPORT_EMAIL'),
+
 ];

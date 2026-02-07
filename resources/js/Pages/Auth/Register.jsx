@@ -27,11 +27,11 @@ export default function Register() {
               </span>
 
               <p className="mt-4 text-gray-600 md:text-lg">
-                Welcome back
+                Selamat datang
               </p>
 
               <h2 className="mt-4 text-2xl font-medium text-gray-800 lg:text-3xl">
-                Sign Up your account
+                Daftar akun baru
               </h2>
             </div>
 
@@ -43,7 +43,7 @@ export default function Register() {
                 <InputForm
                   type="text"
                   name="name"
-                  placeholder="John Doe"
+                  placeholder="Nama lengkap"
                   value={form.data.name}
                   onChange={e => form.setData('name', e.target.value)}
                   error={form.errors.name}
@@ -53,7 +53,7 @@ export default function Register() {
                 <InputForm
                   type="email"
                   name="email"
-                  placeholder="Email address"
+                  placeholder="Alamat email"
                   value={form.data.email}
                   onChange={e => form.setData('email', e.target.value)}
                   error={form.errors.email}
@@ -63,22 +63,24 @@ export default function Register() {
                 <InputForm
                   type="password"
                   name="password"
-                  placeholder="Password"
+                  placeholder="Kata sandi"
                   value={form.data.password}
                   onChange={e => form.setData('password', e.target.value)}
                   error={form.errors.password}
+                  showPasswordToggle
                   icon={<FontAwesomeIcon icon={faKey} className="w-6 h-6 mx-3 text-gray-300" />}
                 />
 
                 <InputForm
                   type="password"
                   name="password_confirmation"
-                  placeholder="Confirm password"
+                  placeholder="Konfirmasi kata sandi"
                   value={form.data.password_confirmation}
                   onChange={e =>
                     form.setData('password_confirmation', e.target.value)
                   }
                   error={form.errors.password_confirmation}
+                  showPasswordToggle
                   icon={<FontAwesomeIcon icon={faKey} className="w-6 h-6 mx-3 text-gray-300" />}
                 />
 
@@ -94,30 +96,30 @@ export default function Register() {
                     />
                   }
                 >
-                  <option value="">Select role</option>
+                  <option value="">Pilih peran</option>
                   <option value="1">Admin</option>
-                  <option value="2">Cashier</option>
+                  <option value="2">Kasir</option>
                   <option value="3">Marketing</option>
                 </SelectForm>
 
                 <SubmitButton disabled={form.processing}>
-                  Sign Up
+                  Daftar
                 </SubmitButton>
 
                 <div className="flex items-center my-4">
                   <hr className="flex-grow border-gray-300" />
-                  <span className="mx-3 text-gray-400">or</span>
+                  <span className="mx-3 text-gray-400">atau</span>
                   <hr className="flex-grow border-gray-300" />
                 </div>
 
                 <div className="text-center">
                   <p className="text-gray-600">
-                    Already have an account?{' '}
+                    Sudah punya akun?{' '}
                     <Link
                       href="/login"
                       className="text-cyan-600 hover:underline font-semibold"
                     >
-                      Sign in
+                      Masuk
                     </Link>
                   </p>
                 </div>
@@ -127,7 +129,7 @@ export default function Register() {
 
           <div className="mt-8 md:mt-16 flex items-center justify-center gap-6">
             <h3 className="text-cyan-600 font-base">
-              Social networks
+              Jaringan sosial
             </h3>
 
             <div className="flex items-center -mx-1.5">

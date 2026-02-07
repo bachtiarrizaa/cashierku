@@ -12,7 +12,7 @@ export default function Index({ procedures, filters = {} }) {
         <>
             <Head title="Tindakan" />
             <MainLayout>
-                <div className="px-2 py-1">
+                <div className="p-4">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3 gap-4">
                         <h1 className="text-xl font-bold text-gray-700">Data Tindakan</h1>
                         <div className="relative flex items-center mt-4 md:mt-0">
@@ -34,25 +34,25 @@ export default function Index({ procedures, filters = {} }) {
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-50">
                                     <tr>
-                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 tracking-wider">No</th>
-                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 tracking-wider">Nama Tindakan</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">No</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Nama Tindakan</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {procedures.data.length > 0 ? (
                                         procedures.data.map((procedure, index) => (
                                             <tr key={procedure.id} className="hover:bg-gray-50 transition-colors">
-                                                <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-600">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs font-medium text-gray-600">
                                                     {index + 1 + (procedures.current_page - 1) * procedures.per_page}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-600">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs font-medium text-gray-600">
                                                     {procedure.name}
                                                 </td>
                                             </tr>
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan="2" className="px-6 py-12 text-center text-gray-500 italic">
+                                            <td colSpan="2" className="px-4 py-12 text-center text-gray-500 italic">
                                                 Tidak ada tindakan ditemukan.
                                             </td>
                                         </tr>

@@ -8,7 +8,7 @@ import { formatDate } from "../../Utils/formatDate";
 
 export default function Index({ transactions, filters = {} }) {
     const role = usePage().props?.auth?.user?.role?.name ?? "";
-    const canCreateTransaction = role === "admin" || role === "cashier";
+    const canCreateTransaction = role === "cashier";
     const [search, setSearch] = useState(filters.search || "");
     const [dateFrom, setDateFrom] = useState(filters.date_from || "");
     const [dateTo, setDateTo] = useState(filters.date_to || "");
@@ -44,7 +44,7 @@ export default function Index({ transactions, filters = {} }) {
         <>
             <Head title="Daftar Transaksi" />
             <MainLayout>
-                <div className="px-2 py-1">
+                <div className="p-4">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
                         <h1 className="text-xl font-bold text-gray-700">Daftar Transaksi</h1>
                         {canCreateTransaction && (
@@ -93,50 +93,50 @@ export default function Index({ transactions, filters = {} }) {
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-50">
                                     <tr>
-                                        <th className="pl-5 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">No</th>
-                                        <th className="px-2 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">No. Transaksi</th>
-                                        <th className="px-2 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Tanggal</th>
-                                        <th className="px-2 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Pasien</th>
-                                        <th className="px-2 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Asuransi</th>
-                                        <th className="px-2 py-3 text-right text-xs font-semibold text-gray-700 tracking-wider">Total</th>
-                                        <th className="px-2 py-3 text-right text-xs font-semibold text-gray-700 tracking-wider">Diskon</th>
-                                        <th className="px-2 py-3 text-right text-xs font-semibold text-gray-700 tracking-wider">Bayar</th>
-                                        <th className="px-2 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Metode</th>
-                                        <th className="px-5 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Aksi</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">No</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">No. Transaksi</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Tanggal</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Pasien</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Asuransi</th>
+                                        <th className="px-4 py-3 text-right text-xs font-semibold text-gray-700 tracking-wider">Total</th>
+                                        <th className="px-4 py-3 text-right text-xs font-semibold text-gray-700 tracking-wider">Diskon</th>
+                                        <th className="px-4 py-3 text-right text-xs font-semibold text-gray-700 tracking-wider">Bayar</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Metode</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {transactions.data?.length > 0 ? (
                                         transactions.data.map((tx, index) => (
                                             <tr key={tx.id}>
-                                                <td className="pl-5 py-2 whitespace-nowrap text-xs font-medium text-gray-600">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs font-medium text-gray-600">
                                                     {index + 1 + (transactions.current_page - 1) * transactions.per_page}
                                                 </td>
-                                                <td className="px-2 py-2 whitespace-nowrap text-xs font-medium text-gray-700">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs font-medium text-gray-700">
                                                     {tx.transaction_number}
                                                 </td>
-                                                <td className="px-2 py-2 whitespace-nowrap text-xs text-gray-600">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs text-gray-600">
                                                     {tx.paid_at ? formatDate(tx.paid_at) : "-"}
                                                 </td>
-                                                <td className="px-2 py-2 whitespace-nowrap text-xs text-gray-700">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs text-gray-700">
                                                     {tx.patient_name}
                                                 </td>
-                                                <td className="px-2 py-2 whitespace-nowrap text-xs text-gray-600">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs text-gray-600">
                                                     {tx.insurance?.name ?? "-"}
                                                 </td>
-                                                <td className="px-2 py-2 whitespace-nowrap text-xs text-right text-gray-600">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs text-right text-gray-600">
                                                     {formatRupiah(tx.total_amount)}
                                                 </td>
-                                                <td className="px-2 py-2 whitespace-nowrap text-xs text-right text-red-600">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs text-right text-red-600">
                                                     -{formatRupiah(tx.total_discount)}
                                                 </td>
-                                                <td className="px-2 py-2 whitespace-nowrap text-xs text-right font-medium text-gray-800">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs text-right font-medium text-gray-800">
                                                     {formatRupiah(tx.final_amount)}
                                                 </td>
-                                                <td className="px-2 py-2 whitespace-nowrap text-xs text-gray-600">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs text-gray-600">
                                                     {paymentMethodLabel[tx.payment_method] ?? tx.payment_method}
                                                 </td>
-                                                <td className="pr-5 py-2 whitespace-nowrap">
+                                                <td className="px-4 py-3 whitespace-nowrap">
                                                     <Link
                                                         href={`/transactions/${tx.id}/receipt`}
                                                         className="inline-flex items-center gap-1 px-2 py-1.5 text-xs font-medium text-cyan-600 bg-cyan-50 rounded-lg hover:bg-cyan-100"
@@ -149,7 +149,7 @@ export default function Index({ transactions, filters = {} }) {
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan="10" className="px-6 py-12 text-center text-gray-500 italic">
+                                            <td colSpan="10" className="px-4 py-12 text-center text-gray-500 italic">
                                                 Tidak ada transaksi ditemukan.
                                             </td>
                                         </tr>

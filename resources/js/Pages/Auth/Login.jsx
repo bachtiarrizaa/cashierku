@@ -66,11 +66,11 @@ export default function Login() {
               </span>
 
               <p className="mt-4 text-gray-600 md:text-lg">
-                Welcome back
+                Selamat datang kembali
               </p>
 
               <h2 className="mt-4 text-2xl font-medium text-gray-800 lg:text-3xl">
-                Sign In to your account
+                Masuk ke akun Anda
               </h2>
             </div>
 
@@ -83,7 +83,7 @@ export default function Login() {
                 <InputForm
                   type="email"
                   name="email"
-                  placeholder="Email address"
+                  placeholder="Alamat email"
                   value={form.data.email}
                   onChange={e => form.setData('email', e.target.value)}
                   error={form.errors.email}
@@ -99,11 +99,12 @@ export default function Login() {
                 <InputForm 
                   type="password"
                   name="password"
-                  placeholder="Password"
+                  placeholder="Kata sandi"
                   value={form.data.password}
                   onChange={e => form.setData('password', e.target.value)}
                   error={form.errors.password}
                   required
+                  showPasswordToggle
                   icon={
                     <FontAwesomeIcon
                       icon={faKey}
@@ -114,24 +115,24 @@ export default function Login() {
 
                 <div className="w-full">
                   <SubmitButton>
-                    Sign in
+                    Masuk
                   </SubmitButton>
                 </div>
 
                 <div className="flex items-center my-4">
                   <hr className="flex-grow border-gray-300" />
-                  <span className="mx-3 text-gray-400">or</span>
+                  <span className="mx-3 text-gray-400">atau</span>
                   <hr className="flex-grow border-gray-300" />
                 </div>
 
                 <div className="text-center">
                   <p className="text-gray-600">
-                    Don&apos;t have an account?{' '}
+                    Belum punya akun?{' '}
                     <Link
                       href="/register"
                       className="text-cyan-600 hover:underline font-semibold"
                     >
-                      Sign up
+                      Daftar
                     </Link>
                   </p>
                 </div>
@@ -141,7 +142,7 @@ export default function Login() {
 
           <div className="mt-8 md:mt-24 flex items-center justify-center gap-6">
             <h3 className="text-cyan-600 font-base">
-              Social networks
+              Jaringan sosial
             </h3>
 
             <div className="flex items-center -mx-1.5">

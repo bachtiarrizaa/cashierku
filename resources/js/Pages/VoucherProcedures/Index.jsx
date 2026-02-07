@@ -1,5 +1,5 @@
 import MainLayout from "../../Layouts/MainLayout";
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import Pagination from "../../Components/Pagination";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -8,6 +8,8 @@ import ConfirmModal from "../../Components/Modals/ConfirmModal";
 import { useVoucherProcedure } from "../../Hooks/VoucherProcedures/useVoucherProcedure";
 
 export default function Index({ voucherProcedures, vouchers, procedures, filters = {} }) {
+    const role = usePage().props?.auth?.user?.role?.name ?? "";
+    const canEdit = role === "admin" || role === "marketing";
     const {
         search,
         setSearch,
@@ -27,7 +29,7 @@ export default function Index({ voucherProcedures, vouchers, procedures, filters
         <>
             <Head title="Voucher Tindakan" />
             <MainLayout>
-                <div className="px-2 py-1">
+                <div className="p-4">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3 gap-4">
                         <h1 className="text-xl font-bold text-gray-700">Voucher & Tindakan Medis</h1>
                         <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4 w-full md:w-auto">
@@ -53,13 +55,15 @@ export default function Index({ voucherProcedures, vouchers, procedures, filters
                                     <option key={v.id} value={v.id}>{v.name}</option>
                                 ))}
                             </select>
-                            <button
-                                onClick={openCreateModal}
-                                className="flex items-center justify-center gap-2 px-4 py-2 text-xs text-white font-semibold border border-cyan-700 rounded-md bg-cyan-600 hover:bg-cyan-700 cursor-pointer transition-colors"
-                            >
-                                <FontAwesomeIcon icon={faPlus} />
-                                <span>Tambah Relasi</span>
-                            </button>
+                            {canEdit && (
+                                <button
+                                    onClick={openCreateModal}
+                                    className="flex items-center justify-center gap-2 px-4 py-2 text-xs text-white font-semibold border border-cyan-700 rounded-md bg-cyan-600 hover:bg-cyan-700 cursor-pointer transition-colors"
+                                >
+                                    <FontAwesomeIcon icon={faPlus} />
+                                    <span>Tambah Relasi</span>
+                                </button>
+                            )}
                         </div>
                     </div>
 
@@ -72,39 +76,43 @@ export default function Index({ voucherProcedures, vouchers, procedures, filters
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-50">
                                     <tr>
-                                        <th className="pl-5 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">No</th>
-                                        <th className="px-2 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Voucher</th>
-                                        <th className="px-2 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Tindakan Medis</th>
-                                        <th className="px-5 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Aksi</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">No</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Voucher</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Tindakan Medis</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {voucherProcedures.data.length > 0 ? (
                                         voucherProcedures.data.map((vp, index) => (
                                             <tr key={vp.id}>
-                                                <td className="pl-5 py-2 whitespace-nowrap text-xs font-medium text-gray-600">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs font-medium text-gray-600">
                                                     {index + 1 + (voucherProcedures.current_page - 1) * voucherProcedures.per_page}
                                                 </td>
-                                                <td className="px-2 py-2 whitespace-nowrap text-xs font-medium text-gray-700">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs font-medium text-gray-700">
                                                     {vp.voucher?.name}
                                                 </td>
                                                 <td className="px-2 py-2 whitespace-nowrap text-xs font-medium text-gray-600">
                                                     {vp.procedure?.name}
                                                 </td>
-                                                <td className="pr-5 py-2 whitespace-nowrap text-left text-sm font-medium">
-                                                    <button
-                                                        onClick={() => confirmDelete(vp.id)}
-                                                        className="text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 p-2 rounded-lg transition-all cursor-pointer"
-                                                        title="Hapus relasi"
-                                                    >
-                                                        <FontAwesomeIcon icon={faTrash} />
-                                                    </button>
+                                                <td className="px-4 py-3 whitespace-nowrap text-left text-sm font-medium">
+                                                    {canEdit ? (
+                                                        <button
+                                                            onClick={() => confirmDelete(vp.id)}
+                                                            className="text-red-600 hover:text-red-900 bg-red-50 hover:bg-red-100 p-2 rounded-lg transition-all cursor-pointer"
+                                                            title="Hapus relasi"
+                                                        >
+                                                            <FontAwesomeIcon icon={faTrash} />
+                                                        </button>
+                                                    ) : (
+                                                        <span className="text-xs text-gray-400">Hanya lihat</span>
+                                                    )}
                                                 </td>
                                             </tr>
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan="4" className="px-6 py-12 text-center text-gray-500 italic">
+                                            <td colSpan="4" className="px-4 py-12 text-center text-gray-500 italic">
                                                 Belum ada relasi voucher dan tindakan. Klik &quot;Tambah Relasi&quot; untuk menambahkan.
                                             </td>
                                         </tr>

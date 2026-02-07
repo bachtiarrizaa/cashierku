@@ -33,7 +33,7 @@ export default function Sidebar() {
           ? "/cashier/dashboard"
           : "/";
 
-  const canAccessVoucher = role === "admin" || role === "marketing";
+  const canAccessVoucher = role === "admin" || role === "marketing" || role === "cashier";
   const canAccessUser = role === "admin";
 
   return (

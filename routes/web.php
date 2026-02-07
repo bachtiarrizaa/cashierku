@@ -40,23 +40,24 @@ Route::middleware('auth')->group(function () {
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     });
 
-    // Admin + Marketing: voucher & voucher-procedures
+    // Voucher & voucher-procedures: index untuk semua (view); create/update/delete hanya admin + marketing
+    Route::get('/vouchers', [VoucherController::class, 'index'])->name('vouchers.index');
+    Route::get('/voucher-procedures', [VoucherProcedureController::class, 'index'])->name('voucher-procedures.index');
+
     Route::middleware('role:admin,marketing')->group(function () {
         Route::get('/marketing/dashboard', [DashboardController::class, 'marketing'])->name('marketing.dashboard');
-        Route::get('/vouchers', [VoucherController::class, 'index'])->name('vouchers.index');
         Route::post('/vouchers', [VoucherController::class, 'store'])->name('vouchers.store');
         Route::put('/vouchers/{voucher}', [VoucherController::class, 'update'])->name('vouchers.update');
         Route::delete('/vouchers/{voucher}', [VoucherController::class, 'destroy'])->name('vouchers.destroy');
-        Route::get('/voucher-procedures', [VoucherProcedureController::class, 'index'])->name('voucher-procedures.index');
         Route::post('/voucher-procedures', [VoucherProcedureController::class, 'store'])->name('voucher-procedures.store');
         Route::delete('/voucher-procedures/{voucherProcedure}', [VoucherProcedureController::class, 'destroy'])->name('voucher-procedures.destroy');
     });
 
-    // Transaksi: list & receipt untuk semua; create/store hanya admin + cashier
+    // Transaksi: list & receipt untuk semua; create/store hanya cashier
     Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
     Route::get('/transactions/{transaction}/receipt', [TransactionController::class, 'receipt'])->name('transactions.receipt');
 
-    Route::middleware('role:admin,cashier')->group(function () {
+    Route::middleware('role:cashier')->group(function () {
         Route::get('/transactions/create', [TransactionController::class, 'create'])->name('transactions.create');
         Route::post('/transactions/calculate-discount', [TransactionController::class, 'calculateDiscount'])->name('transactions.calculate-discount');
         Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');

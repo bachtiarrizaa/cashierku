@@ -13,7 +13,7 @@ export default function Index({ prices, filters = {} }) {
         <>
             <Head title="Harga Tindakan" />
             <MainLayout>
-                <div className="px-2 py-1">
+                <div className="p-4">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3 gap-4">
                         <h1 className="text-xl font-bold text-gray-700">Data Harga Tindakan</h1>
                         <div className="relative flex items-center mt-4 md:mt-0">
@@ -35,30 +35,30 @@ export default function Index({ prices, filters = {} }) {
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-50">
                                     <tr>
-                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 tracking-wider">No</th>
-                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 tracking-wider">Nama Tindakan</th>
-                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 tracking-wider">Harga</th>
-                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 tracking-wider">Mulai Berlaku</th>
-                                        <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 tracking-wider">Berakhir Pada</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">No</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Nama Tindakan</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Harga</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Mulai Berlaku</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Berakhir Pada</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {prices.data.length > 0 ? (
                                         prices.data.map((price, index) => (
                                             <tr key={price.id} className="hover:bg-gray-50 transition-colors">
-                                                <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-600">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs font-medium text-gray-600">
                                                     {index + 1 + (prices.current_page - 1) * prices.per_page}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-700">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs font-medium text-gray-700">
                                                     {price.procedure?.name || "-"}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-600">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs font-medium text-gray-600">
                                                     Rp {Number(price.unit_price).toLocaleString("id-ID")}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-600 font-medium">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs text-gray-600 font-medium">
                                                     {formatDate(price.start_date)}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-600 font-medium">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs text-gray-600 font-medium">
                                                     {formatDate(price.end_date)}
                                                 </td>
                                             </tr>

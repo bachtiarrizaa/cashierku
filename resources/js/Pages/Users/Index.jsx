@@ -27,7 +27,7 @@ export default function Index({ users, roles, filters = {} }) {
         <>
             <Head title="User" />
             <MainLayout>
-                <div className="px-2 py-1">
+                <div className="p-4">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3 gap-4">
                         <h1 className="text-xl font-bold text-gray-700">Manajemen User</h1>
                         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
@@ -58,28 +58,28 @@ export default function Index({ users, roles, filters = {} }) {
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-50">
                                     <tr>
-                                        <th className="pl-5 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">No</th>
-                                        <th className="px-2 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Nama</th>
-                                        <th className="px-2 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Email</th>
-                                        <th className="px-2 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Role</th>
-                                        <th className="px-5 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Aksi</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">No</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Nama</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Email</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Role</th>
+                                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700 tracking-wider">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {users.data?.length > 0 ? (
                                         users.data.map((user, index) => (
                                             <tr key={user.id}>
-                                                <td className="pl-5 py-2 whitespace-nowrap text-xs font-medium text-gray-600">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs font-medium text-gray-600">
                                                     {index + 1 + (users.current_page - 1) * users.per_page}
                                                 </td>
-                                                <td className="px-2 py-2 whitespace-nowrap text-xs font-medium text-gray-700">{user.name}</td>
-                                                <td className="px-2 py-2 whitespace-nowrap text-xs text-gray-600">{user.email}</td>
-                                                <td className="px-2 py-2 whitespace-nowrap text-xs">
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs font-medium text-gray-700">{user.name}</td>
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs text-gray-600">{user.email}</td>
+                                                <td className="px-4 py-3 whitespace-nowrap text-xs">
                                                     <span className="px-2.5 py-1 rounded-full font-medium bg-gray-100 text-gray-700 capitalize">
                                                         {user.role?.name}
                                                     </span>
                                                 </td>
-                                                <td className="pr-5 py-2 whitespace-nowrap text-right text-sm font-medium">
+                                                <td className="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
                                                     <div className="flex justify-end gap-2">
                                                         <button
                                                             onClick={() => openEditModal(user)}

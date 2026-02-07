@@ -1,59 +1,261 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Cashier.Ku
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Cashier.Ku** adalah aplikasi kasir untuk mengelola pembayaran rumah sakit.
+Aplikasi ini membantu melacak invoice pasien, mengelola pembayaran, voucher diskon, serta menghasilkan laporan transaksi harian — semuanya dalam satu platform.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Fitur Utama
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* Manajemen transaksi & pembayaran pasien
+* Manajemen voucher & voucher tindakan
+* Role-based access control (Admin, Kasir, Marketing)
+* Sinkronisasi data master (asuransi, tindakan, harga)
+* Laporan transaksi harian (CSV via email)
+* Integrasi API RS Delta Surya (opsional)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🧰 Persyaratan Sistem
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+* **PHP** 8.5
+* **Composer** 2.x
+* **Node.js** 18+ & **npm**
+* **Database**: **PostgreSQL**
+* **Framework**: Laravel 12.x
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## ⚙️ Cara Menjalankan Aplikasi
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 1. Clone Repository
 
-### Premium Partners
+```bash
+git clone https://github.com/bachtiarrizaa/cashierku
+cd cashierku
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+### 2. Install Dependensi Backend (PHP)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer install
+```
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 3. Install Dependensi Frontend
 
-## Security Vulnerabilities
+```bash
+npm install
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+### 4. Konfigurasi Environment
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Salin file `.env.example` menjadi `.env`:
+
+```bash
+cp .env.example .env
+```
+
+Generate application key:
+
+```bash
+php artisan key:generate
+```
+
+---
+
+### 5. Konfigurasi Database (PostgreSQL)
+
+Aplikasi ini **menggunakan PostgreSQL sebagai database utama**.
+
+Pastikan PostgreSQL sudah berjalan, lalu sesuaikan konfigurasi di `.env`:
+
+```env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=cashierku
+DB_USERNAME=postgres
+DB_PASSWORD=obek
+```
+
+Pastikan database sudah dibuat:
+
+```sql
+CREATE DATABASE cashierku;
+```
+
+---
+
+### 6. Jalankan Migrasi & Seeder
+
+```bash
+php artisan migrate --seed
+```
+
+Seeder akan otomatis membuat:
+
+* **3 Role**: Admin, Kasir, Marketing
+* **User default** (lihat detail di `database/seeders/UserSeeder.php`)
+
+---
+
+### 7. Akun Default
+
+| Role      | Email                                             | Password |
+| --------- | ------------------------------------------------- | -------- |
+| Admin     | [admin@gmail.com](mailto:admin@gmail.com)         | password |
+| Kasir     | [cashier@gmail.com](mailto:cashier@gmail.com)     | password |
+| Marketing | [marketing@gmail.com](mailto:marketing@gmail.com) | password |
+
+---
+
+### 8. Konfigurasi API RS Delta Surya (Opsional)
+
+Jika ingin sinkron data asuransi, tindakan, dan harga dari API RS Delta Surya, tambahkan di `.env`:
+
+```env
+RS_API_BASE_URL=https://api.rs-delta-surya.example.com
+RS_API_EMAIL=your-email@example.com
+RS_API_PASSWORD=your-password
+```
+
+Lalu jalankan:
+
+```bash
+php artisan sync:delta-surya
+```
+
+---
+
+### 9. Sinkronisasi Data Master (Opsional)
+
+```bash
+# Sinkron data asuransi
+php artisan sync:insurances
+
+# Sinkron data tindakan
+php artisan sync:procedures
+
+# Sinkron harga tindakan
+php artisan sync:procedure-prices
+```
+
+---
+
+### 10. Build Assets Frontend
+
+**Development (Vite):**
+
+```bash
+npm run dev
+```
+
+Jalankan di terminal terpisah.
+
+**Production:**
+
+```bash
+npm run build
+```
+
+---
+
+### 11. Jalankan Server
+
+```bash
+php artisan serve
+```
+
+Aplikasi dapat diakses di:
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+## 🔐 Peran & Hak Akses
+
+| Role          | Hak Akses                                                                                               |
+| ------------- | ------------------------------------------------------------------------------------------------------- |
+| **Admin**     | Dashboard, User CRUD, Voucher & Voucher Tindakan (CRUD), Transaksi (read-only), Data Master (read-only) |
+| **Kasir**     | Dashboard, Buat Transaksi, Voucher & Voucher Tindakan (read-only), Data Master (read-only)              |
+| **Marketing** | Dashboard, Voucher & Voucher Tindakan (CRUD), Data Master (read-only)                                   |
+
+---
+
+## 📊 Laporan Harian
+
+Aplikasi menjalankan scheduler untuk mengirim **laporan transaksi harian (CSV)** via email setiap **pukul 01:00**.
+
+Tambahkan di `.env`:
+
+```env
+DAILY_REPORT_EMAIL=admin@example.com
+```
+
+Jalankan scheduler:
+
+```bash
+php artisan schedule:work
+```
+
+Atau via crontab:
+
+```bash
+* * * * * cd /path/to/cashierku && php artisan schedule:run >> /dev/null 2>&1
+```
+
+---
+
+## 🛠️ Troubleshooting
+
+**Port 8000 sudah dipakai**
+
+```bash
+php artisan serve --port=8001
+```
+
+**Vite manifest not found**
+
+```bash
+npm run build
+# atau pastikan npm run dev berjalan
+```
+
+**Error database**
+
+* Pastikan PostgreSQL aktif
+* Pastikan database sudah dibuat
+* Jalankan ulang:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+**Class not found**
+
+```bash
+composer dump-autoload
+```
+
+---
+
+## 🧱 Struktur Teknologi
+
+* **Backend**: Laravel 11, Inertia.js
+* **Frontend**: React 19, Tailwind CSS, Vite
+* **Authentication**: Laravel Breeze (session-based)
+* **Database**: PostgreSQL
+
+---
+
+## 📄 Lisensi
+
+MIT License

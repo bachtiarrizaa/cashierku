@@ -1,7 +1,7 @@
 # Cashier.Ku
 
 **Cashier.Ku** adalah aplikasi kasir untuk mengelola pembayaran rumah sakit.
-Aplikasi ini membantu melacak invoice pasien, mengelola pembayaran, voucher diskon, serta menghasilkan laporan transaksi harian — semuanya dalam satu platform.
+Aplikasi ini membantu membuat invoice pasien, mengelola pembayaran, voucher diskon, serta menghasilkan laporan transaksi harian — semuanya dalam satu platform.
 
 ---
 
@@ -12,7 +12,7 @@ Aplikasi ini membantu melacak invoice pasien, mengelola pembayaran, voucher disk
 * Role-based access control (Admin, Kasir, Marketing)
 * Sinkronisasi data master (asuransi, tindakan, harga)
 * Laporan transaksi harian (CSV via email)
-* Integrasi API RS Delta Surya (opsional)
+* Integrasi API RS Delta Surya
 
 ---
 
@@ -20,7 +20,7 @@ Aplikasi ini membantu melacak invoice pasien, mengelola pembayaran, voucher disk
 
 * **PHP** 8.5
 * **Composer** 2.x
-* **Node.js** 18+ & **npm**
+* **Node.js** 20+ & **npm**
 * **Database**: **PostgreSQL**
 * **Framework**: Laravel 12.x
 

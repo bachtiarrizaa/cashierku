@@ -129,7 +129,7 @@ export default function Register() {
 
           <div className="mt-8 md:mt-16 flex items-center justify-center gap-6">
             <h3 className="text-cyan-600 font-base">
-              Jaringan sosial
+              Media Sosial
             </h3>
 
             <div className="flex items-center -mx-1.5">

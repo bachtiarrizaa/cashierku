@@ -1,5 +1,5 @@
 import MainLayout from "../../Layouts/MainLayout";
-import { Head } from '@inertiajs/react';
+import { Head } from "@inertiajs/react";
 import Pagination from "../../Components/Pagination";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -20,7 +20,6 @@ export default function Index({ prices, filters = {} }) {
                             <span className="absolute">
                                 <FontAwesomeIcon icon={faMagnifyingGlass} className="w-5 h-5 mx-3 text-gray-400" />
                             </span>
-
                             <input
                                 type="text"
                                 placeholder="Cari harga tindakan..."
@@ -51,10 +50,10 @@ export default function Index({ prices, filters = {} }) {
                                                     {index + 1 + (prices.current_page - 1) * prices.per_page}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-700">
-                                                    {price.procedure?.name || '-'}
+                                                    {price.procedure?.name || "-"}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-xs font-medium text-gray-600">
-                                                    RP {Number(price.unit_price).toLocaleString('id-ID')}
+                                                    Rp {Number(price.unit_price).toLocaleString("id-ID")}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-xs text-gray-600 font-medium">
                                                     {formatDate(price.start_date)}
@@ -80,5 +79,5 @@ export default function Index({ prices, filters = {} }) {
                 </div>
             </MainLayout>
         </>
-    )
+    );
 }

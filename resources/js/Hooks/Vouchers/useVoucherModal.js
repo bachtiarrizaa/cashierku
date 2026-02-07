@@ -1,5 +1,8 @@
-import { useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
+import { useForm } from '@inertiajs/react';
+
+const BASE_URL = '/vouchers';
+
 export function useVoucherModal(isOpen, editData, onClose) {
     const { data, setData, post, put, processing, errors, reset } = useForm({
         insurance_id: '',
@@ -13,45 +16,32 @@ export function useVoucherModal(isOpen, editData, onClose) {
     });
 
     useEffect(() => {
-        if (isOpen) {
-            if (editData) {
-                setData({
-                    insurance_id: editData.insurance_id,
-                    name: editData.name,
-                    type: editData.type,
-                    value: editData.value,
-                    max_discount: editData.max_discount || '',
-                    start_date: editData.start_date,
-                    end_date: editData.end_date,
-                    is_active: !!editData.is_active,
-                });
-            } else {
-                reset();
-            }
+        if (!isOpen) return;
+        if (editData) {
+            setData({
+                insurance_id: editData.insurance_id,
+                name: editData.name,
+                type: editData.type,
+                value: editData.value,
+                max_discount: editData.max_discount || '',
+                start_date: editData.start_date,
+                end_date: editData.end_date,
+                is_active: !!editData.is_active,
+            });
+        } else {
+            reset();
         }
     }, [isOpen, editData]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const options = {
-            onSuccess: () => {
-                reset();
-                onClose();
-            },
-        };
-
+        const options = { onSuccess: () => { reset(); onClose(); } };
         if (editData) {
-            put(`/vouchers/${editData.id}`, options);
+            put(`${BASE_URL}/${editData.id}`, options);
         } else {
-            post('/vouchers', options);
+            post(BASE_URL, options);
         }
     };
 
-    return {
-        data,
-        setData,
-        handleSubmit,
-        processing,
-        errors,
-    };
+    return { data, setData, handleSubmit, processing, errors };
 }

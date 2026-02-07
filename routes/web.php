@@ -35,10 +35,18 @@ Route::middleware('auth')->group(function () {
       })->name('marketing.dashboard');
   });
 
-  Route::resource('/insurances', \App\Http\Controllers\InsuranceController::class)->only(['index']);
-  Route::resource('/procedures', \App\Http\Controllers\ProcedureController::class)->only(['index']);
-  Route::resource('/procedure-prices', \App\Http\Controllers\ProcedurePriceController::class)->only(['index']);
-  Route::resource('/vouchers', \App\Http\Controllers\VoucherController::class);
+  Route::get('/insurances', [\App\Http\Controllers\InsuranceController::class, 'index'])->name('insurances.index');
+  Route::get('/procedures', [\App\Http\Controllers\ProcedureController::class, 'index'])->name('procedures.index');
+  Route::get('/procedure-prices', [\App\Http\Controllers\ProcedurePriceController::class, 'index'])->name('procedure-prices.index');
+
+  Route::get('/vouchers', [\App\Http\Controllers\VoucherController::class, 'index'])->name('vouchers.index');
+  Route::post('/vouchers', [\App\Http\Controllers\VoucherController::class, 'store'])->name('vouchers.store');
+  Route::put('/vouchers/{voucher}', [\App\Http\Controllers\VoucherController::class, 'update'])->name('vouchers.update');
+  Route::delete('/vouchers/{voucher}', [\App\Http\Controllers\VoucherController::class, 'destroy'])->name('vouchers.destroy');
+
+  Route::get('/voucher-procedures', [\App\Http\Controllers\VoucherProcedureController::class, 'index'])->name('voucher-procedures.index');
+  Route::post('/voucher-procedures', [\App\Http\Controllers\VoucherProcedureController::class, 'store'])->name('voucher-procedures.store');
+  Route::delete('/voucher-procedures/{voucherProcedure}', [\App\Http\Controllers\VoucherProcedureController::class, 'destroy'])->name('voucher-procedures.destroy');
 
   Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

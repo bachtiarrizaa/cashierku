@@ -10,6 +10,7 @@ import {
   faAnglesRight,
   faRightFromBracket,
   faGear,
+  faLink,
   faMoneyCheckDollar,
   faShieldHalved,
   faStethoscope,
@@ -96,6 +97,13 @@ export default function Sidebar() {
               label="Voucher"
               isOpen={isOpen}
               to="/vouchers"
+            />
+
+            <MenuItem
+              icon={faLink}
+              label="Voucher Tindakan"
+              isOpen={isOpen}
+              to="/voucher-procedures"
             />
           </div>
         </nav>

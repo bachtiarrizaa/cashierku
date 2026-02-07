@@ -43,17 +43,9 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        $user = Auth::user();
-        $redirectTo = match($user->role->name) {
-            'admin' => route('admin.dashboard', absolute: false),
-            'cashier' => route('cashier.dashboard', absolute: false),
-            'marketing' => route('marketing.dashboard', absolute: false),
-            default => route('dashboard', absolute: false),
-        };
-
         return Inertia::render('Auth/Login', [
             'loginSuccess' => true,
-            'redirectTo'   => $redirectTo,
+            'redirectTo'   => redirect()->intended('dashboard')->getTargetUrl(),
         ]);
     }
 

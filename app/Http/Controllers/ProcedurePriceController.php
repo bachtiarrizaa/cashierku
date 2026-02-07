@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Models\ProcedurePrice;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ProcedurePriceController extends Controller
@@ -19,12 +18,11 @@ class ProcedurePriceController extends Controller
             });
         }
 
-        $prices = $query->paginate(10)
-            ->withQueryString();
+        $prices = $query->latest('procedure_prices.created_at')->paginate(10)->withQueryString();
 
         return Inertia::render('ProcedurePrices/Index', [
             'prices' => $prices,
-            'filters' => $request->only(['search'])
+            'filters' => $request->only(['search']),
         ]);
     }
 }

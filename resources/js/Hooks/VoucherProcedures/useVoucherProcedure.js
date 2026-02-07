@@ -1,35 +1,26 @@
 import { useState, useEffect } from 'react';
 import { router, useForm } from '@inertiajs/react';
 
-const BASE_URL = '/vouchers';
+const BASE_URL = '/voucher-procedures';
 
-export function useVoucher(filters = {}) {
+export function useVoucherProcedure(filters = {}) {
     const [search, setSearch] = useState(filters.search || '');
+    const [voucherFilter, setVoucherFilter] = useState(filters.voucher_id || '');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editData, setEditData] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
 
     const { delete: destroy, processing: deleting } = useForm();
 
     useEffect(() => {
-        if (search === (filters.search ?? '')) return;
+        if (search === (filters.search ?? '') && voucherFilter === (filters.voucher_id ?? '')) return;
         const timer = setTimeout(() => {
-            router.get(BASE_URL, { search: search || undefined }, { preserveState: true, replace: true });
+            router.get(BASE_URL, { search: search || undefined, voucher_id: voucherFilter || undefined }, { preserveState: true, replace: true });
         }, 300);
         return () => clearTimeout(timer);
-    }, [search, filters.search]);
+    }, [search, voucherFilter]);
 
-    const openCreateModal = () => {
-        setEditData(null);
-        setIsModalOpen(true);
-    };
-
-    const openEditModal = (item) => {
-        setEditData(item);
-        setIsModalOpen(true);
-    };
-
+    const openCreateModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
     const confirmDelete = (id) => {
@@ -48,10 +39,10 @@ export function useVoucher(filters = {}) {
     return {
         search,
         setSearch,
+        voucherFilter,
+        setVoucherFilter,
         isModalOpen,
-        editData,
         openCreateModal,
-        openEditModal,
         closeModal,
         isDeleteModalOpen,
         confirmDelete,

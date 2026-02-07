@@ -5,23 +5,12 @@ export function useInsurances(filters = {}) {
     const [search, setSearch] = useState(filters.search || '');
 
     useEffect(() => {
-        if ((filters.search || '') === search) {
-            return;
-        }
-
+        if (search === (filters.search ?? '')) return;
         const timer = setTimeout(() => {
-            router.get(
-                '/insurances',
-                { search: search },
-                { preserveState: true, replace: true }
-            );
+            router.get('/insurances', { search: search || undefined }, { preserveState: true, replace: true });
         }, 300);
-
         return () => clearTimeout(timer);
     }, [search, filters.search]);
 
-    return {
-        search,
-        setSearch,
-    };
+    return { search, setSearch };
 }

@@ -1,5 +1,5 @@
 import MainLayout from "../../Layouts/MainLayout";
-import { Head } from '@inertiajs/react';
+import { Head } from "@inertiajs/react";
 import Pagination from "../../Components/Pagination";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
@@ -19,7 +19,6 @@ export default function Index({ procedures, filters = {} }) {
                             <span className="absolute">
                                 <FontAwesomeIcon icon={faMagnifyingGlass} className="w-5 h-5 mx-3 text-gray-400" />
                             </span>
-
                             <input
                                 type="text"
                                 placeholder="Cari tindakan..."
@@ -67,5 +66,5 @@ export default function Index({ procedures, filters = {} }) {
                 </div>
             </MainLayout>
         </>
-    )
+    );
 }

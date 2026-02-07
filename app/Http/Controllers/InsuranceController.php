@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Models\Insurance;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class InsuranceController extends Controller
@@ -17,12 +16,11 @@ class InsuranceController extends Controller
             $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($request->input('search')) . '%']);
         }
 
-        $insurances = $query->paginate(10)
-            ->withQueryString();
+        $insurances = $query->orderBy('name')->paginate(10)->withQueryString();
 
         return Inertia::render('Insurances/Index', [
             'insurances' => $insurances,
-            'filters' => $request->only(['search'])
+            'filters' => $request->only(['search']),
         ]);
     }
 }

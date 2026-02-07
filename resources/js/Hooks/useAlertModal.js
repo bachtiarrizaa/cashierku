@@ -1,6 +1,20 @@
 import { useState, useCallback } from 'react'
 
-const DEFAULT_DURATION = 2500
+const DEFAULT_DURATION = 3000
+
+/**
+ * Hook untuk mengelola AlertModal
+ * Memudahkan menampilkan alert success/error dari berbagai aksi
+ * Duration (3000ms) sudah terkonfigurasi di dalam hook.
+ *
+ * @example
+ * const { alert, showSuccess, showError } = useAlertModal()
+ *
+ * // Di JSX - tinggal pakai, duration sudah ada di dalam
+ * <AlertModal {...alert} />
+ *
+ * showSuccess('Data berhasil disimpan')
+ */
 export function useAlertModal(duration = DEFAULT_DURATION) {
   const [state, setState] = useState({
     isOpen: false,

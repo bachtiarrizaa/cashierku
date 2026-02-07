@@ -3,12 +3,20 @@ import { Head, router } from "@inertiajs/react";
 import { useState, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash, faReceipt } from "@fortawesome/free-solid-svg-icons";
+import QRCode from "react-qr-code";
 import axios from "axios";
+
+function generateVA() {
+    return String(Math.floor(1000000000000000 + Math.random() * 9000000000000000));
+}
 
 export default function Create({ insurances, procedures, payment_methods }) {
     const [patientName, setPatientName] = useState("");
     const [insuranceId, setInsuranceId] = useState("");
     const [paymentMethod, setPaymentMethod] = useState("cash");
+    const [paymentAmount, setPaymentAmount] = useState("");
+    const [paymentReference, setPaymentReference] = useState("");
+    const [vaNumber, setVaNumber] = useState("");
     const [cart, setCart] = useState([]);
     const [calculated, setCalculated] = useState({
         items: [],
@@ -53,6 +61,16 @@ export default function Create({ insurances, procedures, payment_methods }) {
         fetchDiscount();
     }, [fetchDiscount]);
 
+    useEffect(() => {
+        if (paymentMethod === "transfer") {
+            setVaNumber(generateVA());
+        } else {
+            setVaNumber("");
+        }
+        setPaymentAmount("");
+        setPaymentReference("");
+    }, [paymentMethod]);
+
     const addProcedure = (procedure) => {
         if (!procedure.unit_price || procedure.unit_price <= 0) return;
         setCart((prev) => [
@@ -76,8 +94,15 @@ export default function Create({ insurances, procedures, payment_methods }) {
         if (cart.length === 0) return;
         if (calculated.items.length === 0) return;
 
+        const finalAmount = calculated.final_amount || 0;
+        if (paymentMethod === "cash") {
+            const paid = parseInt(paymentAmount, 10) || 0;
+            if (paid < finalAmount) return;
+        }
+        if ((paymentMethod === "debit" || paymentMethod === "credit") && !paymentReference.trim()) return;
+
         setSubmitting(true);
-        router.post("/transactions", {
+        const payload = {
             patient_name: patientName.trim(),
             insurance_id: insuranceId,
             payment_method: paymentMethod,
@@ -91,7 +116,15 @@ export default function Create({ insurances, procedures, payment_methods }) {
                     voucher_id: item.voucher_id || null,
                 };
             }),
-        }, {
+        };
+        if (paymentMethod === "cash") {
+            payload.payment_amount = parseInt(paymentAmount, 10) || 0;
+        } else if (paymentMethod === "transfer") {
+            payload.payment_reference = vaNumber;
+        } else if (paymentMethod === "debit" || paymentMethod === "credit") {
+            payload.payment_reference = paymentReference.trim();
+        }
+        router.post("/transactions", payload, {
             onFinish: () => setSubmitting(false),
         });
     };
@@ -261,14 +294,84 @@ export default function Create({ insurances, procedures, payment_methods }) {
                                         ))}
                                     </select>
                                 </div>
-                                <button
-                                    type="submit"
-                                    disabled={submitting || !patientName.trim() || !insuranceId || calculated.items.length === 0}
-                                    className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-cyan-600 rounded-lg hover:bg-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    <FontAwesomeIcon icon={faReceipt} />
-                                    {submitting ? "Menyimpan…" : "Bayar"}
-                                </button>
+
+                                {/* Tunai: uang pembayaran + kembalian */}
+                                {paymentMethod === "cash" && calculated.final_amount > 0 && (
+                                    <div className="mb-4 space-y-2">
+                                        <label className="block text-xs font-medium text-gray-600">Uang Pembayaran</label>
+                                        <input
+                                            type="number"
+                                            min={calculated.final_amount}
+                                            value={paymentAmount}
+                                            onChange={(e) => setPaymentAmount(e.target.value)}
+                                            placeholder={`Min. ${formatRupiah(calculated.final_amount)}`}
+                                            className="block w-full max-w-xs px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:border-cyan-600 focus:ring-cyan-300"
+                                        />
+                                        {paymentAmount && parseInt(paymentAmount, 10) >= calculated.final_amount && (
+                                            <p className="text-sm text-green-600 font-medium">
+                                                Kembalian: {formatRupiah(parseInt(paymentAmount, 10) - calculated.final_amount)}
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Transfer: tampilkan VA */}
+                                {paymentMethod === "transfer" && vaNumber && (
+                                    <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                        <label className="block text-xs font-medium text-gray-600 mb-1">Nomor VA Pembayaran</label>
+                                        <p className="font-mono text-lg font-semibold text-gray-800 tracking-wider">{vaNumber}</p>
+                                        <p className="text-xs text-gray-500 mt-1">Transfer ke nomor VA di atas sesuai total bayar</p>
+                                    </div>
+                                )}
+
+                                {/* Debit / Kredit: input nomor kartu */}
+                                {(paymentMethod === "debit" || paymentMethod === "credit") && (
+                                    <div className="mb-4">
+                                        <label className="block text-xs font-medium text-gray-600 mb-1">
+                                            Nomor Kartu {paymentMethod === "debit" ? "Debit" : "Kredit"}
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={paymentReference}
+                                            onChange={(e) => setPaymentReference(e.target.value)}
+                                            placeholder="Masukkan nomor kartu"
+                                            maxLength={20}
+                                            className="block w-full max-w-xs px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-1 focus:border-cyan-600 focus:ring-cyan-300"
+                                        />
+                                    </div>
+                                )}
+
+                                {/* QRIS: tampilkan QR code */}
+                                {paymentMethod === "qris" && calculated.final_amount > 0 && (
+                                    <div className="mb-4 flex flex-col items-center p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                        <label className="block text-xs font-medium text-gray-600 mb-2">Scan QR Code untuk pembayaran</label>
+                                        <QRCode
+                                            value={`QRIS-${calculated.final_amount}-${Date.now()}`}
+                                            size={160}
+                                            level="M"
+                                            className="border border-gray-200 rounded-lg bg-white p-2"
+                                        />
+                                        <p className="text-sm text-gray-600 mt-2">{formatRupiah(calculated.final_amount)}</p>
+                                    </div>
+                                )}
+
+                                {(() => {
+                                    const canSubmit = paymentMethod === "cash"
+                                        ? (parseInt(paymentAmount, 10) || 0) >= (calculated.final_amount || 0)
+                                        : (paymentMethod === "debit" || paymentMethod === "credit")
+                                            ? paymentReference.trim().length > 0
+                                            : true;
+                                    return (
+                                        <button
+                                            type="submit"
+                                            disabled={submitting || !patientName.trim() || !insuranceId || calculated.items.length === 0 || !canSubmit}
+                                            className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-cyan-600 rounded-lg hover:bg-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            <FontAwesomeIcon icon={faReceipt} />
+                                            {submitting ? "Menyimpan…" : "Bayar"}
+                                        </button>
+                                    );
+                                })()}
                             </div>
                         )}
                     </form>

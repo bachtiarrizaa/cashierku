@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAnglesRight,
   faRightFromBracket,
-  faGear,
   faLink,
   faReceipt,
   faShieldHalved,
@@ -16,6 +15,7 @@ import {
   faTags,
   faTicket,
   faUser,
+  faChartArea,
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function Sidebar() {
@@ -59,7 +59,7 @@ export default function Sidebar() {
 
           <div>
             <MenuItem
-              icon={faUser}
+              icon={faChartArea}
               label="Dashboard"
               isOpen={isOpen}
               to={dashboardUrl}
@@ -122,12 +122,6 @@ export default function Sidebar() {
         </nav>
 
         <div className="mt-12">
-          <MenuItem
-            icon={faGear}
-            label="Pengaturan"
-            isOpen={isOpen}
-            to="/settings"
-          />
           <LogoutButton
             icon={faRightFromBracket}
             label="Keluar"

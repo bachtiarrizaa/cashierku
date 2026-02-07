@@ -13,6 +13,8 @@ class Transaction extends Model
         'insurance_id',
         'payment_method',
         'payment_status',
+        'payment_reference',
+        'payment_amount',
         'total_amount',
         'total_discount',
         'final_amount',

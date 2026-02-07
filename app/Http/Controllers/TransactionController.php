@@ -99,7 +99,7 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $rules = [
             'patient_name' => 'required|string|max:255',
             'insurance_id' => 'required|exists:insurances,id',
             'payment_method' => 'required|in:cash,debit,credit,transfer,qris',
@@ -109,7 +109,18 @@ class TransactionController extends Controller
             'items.*.discount' => 'required|integer|min:0',
             'items.*.final_price' => 'required|integer|min:0',
             'items.*.voucher_id' => 'nullable|exists:vouchers,id',
-        ]);
+        ];
+
+        $paymentMethod = $request->input('payment_method');
+        if ($paymentMethod === 'cash') {
+            $rules['payment_amount'] = 'required|integer|min:0';
+        } elseif (in_array($paymentMethod, ['debit', 'credit'])) {
+            $rules['payment_reference'] = 'required|string|max:50';
+        }
+        // transfer: VA digenerate di backend
+        // qris: tidak perlu input tambahan
+
+        $validated = $request->validate($rules);
 
         $calculated = $this->transactionService->calculateDiscount(
             $validated['insurance_id'],
@@ -120,9 +131,27 @@ class TransactionController extends Controller
         $totalDiscount = $calculated['total_discount'];
         $finalAmount = $calculated['final_amount'];
 
+        if ($paymentMethod === 'cash') {
+            $paymentAmount = (int) $validated['payment_amount'];
+            if ($paymentAmount < $finalAmount) {
+                return redirect()->back()->withErrors(['payment_amount' => 'Uang pembayaran tidak boleh kurang dari total bayar.']);
+            }
+        }
+
         $transactionNumber = 'TRX-' . date('Ymd') . '-' . strtoupper(Str::random(6));
         while (Transaction::where('transaction_number', $transactionNumber)->exists()) {
             $transactionNumber = 'TRX-' . date('Ymd') . '-' . strtoupper(Str::random(6));
+        }
+
+        $paymentReference = $validated['payment_reference'] ?? $request->input('payment_reference');
+        $paymentAmountValue = null;
+
+        if ($paymentMethod === 'transfer') {
+            $paymentReference = $paymentReference ?: $this->generateVA();
+        } elseif ($paymentMethod === 'cash') {
+            $paymentAmountValue = (int) $validated['payment_amount'];
+        } elseif (in_array($paymentMethod, ['debit', 'credit'])) {
+            $paymentReference = $validated['payment_reference'];
         }
 
         $transaction = Transaction::create([
@@ -132,6 +161,8 @@ class TransactionController extends Controller
             'insurance_id' => $validated['insurance_id'],
             'payment_method' => $validated['payment_method'],
             'payment_status' => 'paid',
+            'payment_reference' => $paymentReference,
+            'payment_amount' => $paymentAmountValue,
             'total_amount' => $totalAmount,
             'total_discount' => $totalDiscount,
             'final_amount' => $finalAmount,
@@ -151,6 +182,14 @@ class TransactionController extends Controller
         }
 
         return redirect()->route('transactions.receipt', $transaction->id)->with('success', 'Transaksi berhasil disimpan.');
+    }
+
+    /**
+     * Generate nomor VA acak (16 digit).
+     */
+    private function generateVA(): string
+    {
+        return str_pad((string) random_int(1000000000000000, 9999999999999999), 16, '0', STR_PAD_LEFT);
     }
 
     /**

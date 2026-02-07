@@ -149,11 +149,11 @@ export default function Login() {
                 <FontAwesomeIcon icon={faXTwitter} className="text-xl" />
               </SocialMedia>
 
-              <SocialMedia href="https://linkedin.com">
+              <SocialMedia href="https://www.linkedin.com/in/bachtiarrizaa">
                 <FontAwesomeIcon icon={faLinkedin} className="text-xl" />
               </SocialMedia>
 
-              <SocialMedia href="https://facebook.com">
+              <SocialMedia href="https://bekkk.medium.com/">
                 <FontAwesomeIcon icon={faMedium} className="text-xl" />
               </SocialMedia>
 

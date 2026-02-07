@@ -57,6 +57,23 @@ export default function Receipt({ transaction }) {
                             <div className="text-gray-500">Metode Pembayaran</div>
                             <div className="text-gray-800 capitalize">{transaction.payment_method}</div>
 
+                            {transaction.payment_reference && (
+                                <>
+                                    <div className="text-gray-500">
+                                        {transaction.payment_method === "transfer" ? "Nomor VA" : "Nomor Kartu"}
+                                    </div>
+                                    <div className="text-gray-800 font-mono">{transaction.payment_reference}</div>
+                                </>
+                            )}
+                            {transaction.payment_amount != null && transaction.payment_method === "cash" && (
+                                <>
+                                    <div className="text-gray-500">Uang Diterima</div>
+                                    <div className="text-gray-800">{formatRupiah(transaction.payment_amount)}</div>
+                                    <div className="text-gray-500">Kembalian</div>
+                                    <div className="text-gray-800">{formatRupiah(transaction.payment_amount - transaction.final_amount)}</div>
+                                </>
+                            )}
+
                             <div className="text-gray-500">Kasir</div>
                             <div className="text-gray-800">{transaction.user?.name ?? "-"}</div>
                         </div>
